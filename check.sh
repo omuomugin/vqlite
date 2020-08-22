@@ -1,0 +1,1 @@
+v fmt -diff ./src/*.v
