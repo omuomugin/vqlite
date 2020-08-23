@@ -6,7 +6,7 @@ sqlite clone written in vlang (original article are with C)
 - [x] Part 1 - Introduction and Setting up the REPL
 - [x] Part 2 - World’s Simplest SQL Compiler and Virtual Machine
 - [x] Part 3 - An In-Memory, Append-Only, Single-Table Database
-- [ ] Part 4 - Our First Tests (and Bugs)
+- [x] Part 4 - Our First Tests (and Bugs)
 - [ ] Part 5 - Persistence to Disk
 - [ ] Part 6 - The Cursor Abstraction
 - [ ] Part 7 - Introduction to the B-Tree
