@@ -51,10 +51,21 @@ fn prepare_statement(command string) ?Statement {
 			println(err)
 			return error("[Error] Syntax error \'$command\'")
 		}
+		if id < 1 {
+			return error('[Error] id should be positive integer')
+		}
+		username := command_args[2]
+		if username.len > 32 {
+			return error('[Error] username should be less than 32')
+		}
+		email := command_args[3]
+		if email.len > 255 {
+			return error('[Error] email should be less than 255')
+		}
 		row_to_insert := Row{
 			id: id
-			username: command_args[2]
-			email: command_args[3]
+			username: username
+			email: email
 		}
 		return Statement{
 			statement_type: StatementType.type_insert

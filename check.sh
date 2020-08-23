@@ -1,1 +1,1 @@
-find . -name "*.v" | xargs v fmt -diff
+find . -name "*.v" | xargs v fmt -diff && v test .
