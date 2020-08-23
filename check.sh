@@ -1,1 +1,1 @@
-v fmt -diff ./src/*.v
+find . -name "*.v" | xargs v fmt -diff

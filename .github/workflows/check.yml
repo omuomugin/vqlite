@@ -16,4 +16,4 @@ jobs:
       uses: nocturlab/setup-vlang-action@v1.1.2
 
     - name: fmt
-      run: v fmt -c ./src/*.v
+      run: find . -name "*.v" | xargs v fmt -c
