@@ -29,7 +29,7 @@ struct Row {
 }
 
 struct Table {
-mut: 
+mut:
 	num_rows u32
 	pages    []Row
 }
@@ -69,7 +69,7 @@ fn do_meta_command(command string) ?MetaCommandResult {
 		if command == '.exit' {
 			return MetaCommandResult.exit
 		} else {
-			return error('Unrecognized command \'$command\'')
+			return error("Unrecognized command \'$command\'")
 		}
 	}
 	return MetaCommandResult.success
@@ -79,12 +79,14 @@ fn prepare_statement(command string) ?Statement {
 	// [0]: command, [1]: arg ...
 	command_args := command.split(' ')
 	if command_args[0] == 'insert' {
+		// command should be `insert :id :username :email`
 		if command_args.len < 3 {
-			return error('Syntax error \'$command\'')
+			return error("Syntax error \'$command\'")
 		}
+		// if the first element was not `int` return error
 		id := util.s_to_u32(command_args[1]) or {
 			println(err)
-			return error('Syntax error \'$command\'')
+			return error("Syntax error \'$command\'")
 		}
 		row_to_insert := Row{
 			id: id
@@ -100,21 +102,17 @@ fn prepare_statement(command string) ?Statement {
 			statement_type: StatementType.type_select
 		}
 	}
-	return error('Unrecognized statement \'$command\'')
+	return error("Unrecognized statement \'$command\'")
 }
 
 fn execute_statement(statement Statement, mut table Table) {
 	match statement.statement_type {
-		.type_insert { 
-			execute_insert(statement, mut table) or {
+		.type_insert { execute_insert(statement, mut table) or {
 				println(err)
-			}
-		}
-		.type_select { 
-			execute_select(statement, mut table) or {
+			} }
+		.type_select { execute_select(statement, mut table) or {
 				println(err)
-			}
-		}
+			} }
 	}
 }
 
