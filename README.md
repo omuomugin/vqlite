@@ -28,3 +28,6 @@ Part 13 - Updating Parent Node After a Split
 └── src         # source
     └── main.v
 ```
+
+![architecture overview](./assets/architecture.gif)
+by https://www.sqlite.org/arch.html
