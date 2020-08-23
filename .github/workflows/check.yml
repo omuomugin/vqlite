@@ -17,3 +17,6 @@ jobs:
 
     - name: fmt
       run: find ./src -name "*.v" | xargs v fmt -c
+    
+    - name: test
+      run: v test .

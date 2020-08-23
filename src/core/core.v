@@ -7,7 +7,7 @@ const (
 )
 
 pub struct Table {
-mut:
+pub mut:
 	num_rows u32
 	pages    []Row
 }
@@ -33,7 +33,9 @@ pub fn process_command(command string, mut table Table) ? {
 		println(err)
 		return error('[Error] Preparing Statement failed')
 	}
-	execute_statement(statement, mut table)
+	execute_statement(statement, mut table) or {
+		return error('[Error] Executing Statement failed')
+	}
 }
 
 fn prepare_statement(command string) ?Statement {
@@ -66,17 +68,19 @@ fn prepare_statement(command string) ?Statement {
 	return error("[Error] Unrecognized statement \'$command\'")
 }
 
-fn execute_statement(statement Statement, mut table Table) {
+fn execute_statement(statement Statement, mut table Table) ? {
 	match statement.statement_type {
 		.type_insert {
 			execute_insert(statement, mut table) or {
 				println(err)
+				return error("[Error] failed to execute statement \'$statement\'")
 			}
 			println('Executed')
 		}
 		.type_select {
 			execute_select(statement, mut table) or {
 				println(err)
+				return error("[Error] failed to execute statement \'$statement\'")
 			}
 			println('Executed')
 		}
