@@ -2,32 +2,6 @@ module core
 
 import util
 
-const (
-	table_max_size = 100
-)
-
-pub struct Table {
-pub mut:
-	num_rows u32
-	pages    []Row
-}
-
-struct Row {
-	id       u32
-	username string
-	email    string
-}
-
-struct Statement {
-	statement_type StatementType
-	row_to_insert  Row
-}
-
-enum StatementType {
-	type_insert
-	type_select
-}
-
 pub fn process_command(command string, mut table Table) ? {
 	statement := prepare_statement(command) or {
 		println(err)
@@ -51,21 +25,9 @@ fn prepare_statement(command string) ?Statement {
 			println(err)
 			return error("[Error] Syntax error \'$command\'")
 		}
-		if id < 1 {
-			return error('[Error] id should be positive integer')
-		}
-		username := command_args[2]
-		if username.len > 32 {
-			return error('[Error] username should be less than 32')
-		}
-		email := command_args[3]
-		if email.len > 255 {
-			return error('[Error] email should be less than 255')
-		}
-		row_to_insert := Row{
-			id: id
-			username: username
-			email: email
+		row_to_insert := create_row_with_validation(id, command_args[2], command_args[3]) or {
+			println(err)
+			return error("[Error] Syntax error \'$command\'")
 		}
 		return Statement{
 			statement_type: StatementType.type_insert
@@ -102,8 +64,7 @@ fn execute_insert(statement Statement, mut table Table) ? {
 	if table.num_rows >= table_max_size {
 		return error('[Error] failed to insert table was full. max page size is $table_max_size')
 	}
-	table.pages << statement.row_to_insert
-	table.num_rows = table.num_rows + 1
+	table.insert(statement.row_to_insert)
 }
 
 fn execute_select(statement Statement, mut table Table) ? {
