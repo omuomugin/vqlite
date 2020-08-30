@@ -1,7 +1,5 @@
 module core
 
-import util
-
 pub fn process_command(command string, mut table Table) ? {
 	statement := prepare_statement(command) or {
 		println(err)
@@ -21,7 +19,7 @@ fn prepare_statement(command string) ?Statement {
 			return error("[Error] Syntax error \'$command\'")
 		}
 		// if the first element was not `int` return error
-		id := util.s_to_u32(command_args[1]) or {
+		id := parse_id(command_args[1]) or {
 			println(err)
 			return error("[Error] Syntax error \'$command\'")
 		}
@@ -39,6 +37,19 @@ fn prepare_statement(command string) ?Statement {
 		}
 	}
 	return error("[Error] Unrecognized statement \'$command\'")
+}
+
+// parse id to u32
+fn parse_id(str string) ?u32 {
+	if str == '0' {
+		return 0
+	}
+	parsed_int := str.u32()
+	// when failed parse, `str.u32()` will return 0
+	if parsed_int == 0 {
+		return error("string parsing to u32 failed \'$str\'")
+	}
+	return parsed_int
 }
 
 fn execute_statement(statement Statement, mut table Table) ? {
