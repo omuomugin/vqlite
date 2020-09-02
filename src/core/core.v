@@ -39,7 +39,6 @@ fn prepare_statement(command string) ?Statement {
 	return error("[Error] Unrecognized statement \'$command\'")
 }
 
-// parse id to u32
 fn parse_id(str string) ?u32 {
 	if str == '0' {
 		return 0
@@ -62,24 +61,19 @@ fn execute_statement(statement Statement, mut table Table) ? {
 			println('Executed')
 		}
 		.type_select {
-			execute_select(statement, mut table) or {
-				println(err)
-				return error("[Error] failed to execute statement \'$statement\'")
-			}
+			execute_select(statement, mut table)
 			println('Executed')
 		}
 	}
 }
 
 fn execute_insert(statement Statement, mut table Table) ? {
-	if table.num_rows >= table_max_size {
-		return error('[Error] failed to insert table was full. max page size is $table_max_size')
+	table.insert(statement.row_to_insert) or {
+		return error(err)
 	}
-	table.insert(statement.row_to_insert)
 }
 
-fn execute_select(statement Statement, mut table Table) ? {
-	for page in table.pages {
-		println('($page.id, $page.username, $page.email)')
-	}
+fn execute_select(statement Statement, mut table Table) {
+	str := table.select_all()
+	println(str)
 }

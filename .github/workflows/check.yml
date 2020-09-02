@@ -13,10 +13,19 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: Setup V environment
-      uses: nocturlab/setup-vlang-action@v1.1.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git clone https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/vlang/v
+        cd v
+        make
+        sudo ./v symlink
+        cd ../
 
     - name: fmt
-      run: find ./src -name "*.v" | xargs v fmt -c
+      run: |
+        find ./src -name "*.v" | xargs v fmt -c
     
     - name: test
-      run: v test .
+      run: |
+        find ./src -name "*_test.v" | xargs v test
