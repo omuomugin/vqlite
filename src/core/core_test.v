@@ -2,7 +2,7 @@ import core
 import os
 
 const (
-	test_db_file_name = 'test.db'
+	test_db_file_name = './test.db'
 )
 
 fn create_db() {
