@@ -8,6 +8,8 @@ sqlite clone written in vlang (original article are with C)
 - [x] Part 3 - An In-Memory, Append-Only, Single-Table Database
 - [x] Part 4 - Our First Tests (and Bugs)
 - [ ] Part 5 - Persistence to Disk
+    - [x] without cache
+    - [ ] with cache
 - [ ] Part 6 - The Cursor Abstraction
 - [ ] Part 7 - Introduction to the B-Tree
 - [ ] Part 8 - B-Tree Leaf Node Format
