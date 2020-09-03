@@ -7,7 +7,7 @@ pub mut:
 
 pub fn db_open(filepath string) ?Table {
 	pager := pager_open(filepath) or {
-		return error(err)
+		return error('opening db failed\n\t$err')
 	}
 	return Table{
 		pager: pager
@@ -16,7 +16,7 @@ pub fn db_open(filepath string) ?Table {
 
 fn (mut t Table) insert(row Row) ? {
 	t.pager.write_page(row) or {
-		return error(err)
+		return error('insert failed\n\t$err')
 	}
 }
 

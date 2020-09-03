@@ -271,7 +271,6 @@ fn test_process_command__insert_more_then_max() {
 	for i in 1 .. 16 {
 		command := 'insert $i user user@user.com'
 		core.process_command(command, mut target_table) or {
-			println(err)
 			error_state = true
 		}
 	}

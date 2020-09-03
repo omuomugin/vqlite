@@ -2,11 +2,10 @@ module core
 
 pub fn process_command(command string, mut table Table) ? {
 	statement := prepare_statement(command) or {
-		println(err)
-		return error('[Error] Preparing Statement failed')
+		return error('Preparing Statement failed\n\t$err')
 	}
 	execute_statement(statement, mut table) or {
-		return error('[Error] Executing Statement failed')
+		return error('Executing Statement failed\n\t$err')
 	}
 }
 
@@ -16,16 +15,14 @@ fn prepare_statement(command string) ?Statement {
 	if command_args[0] == 'insert' {
 		// command should be `insert :id :username :email`
 		if command_args.len < 3 {
-			return error("[Error] Syntax error \'$command\'")
+			return error("Syntax error \'$command\'")
 		}
 		// if the first element was not `int` return error
 		id := parse_id(command_args[1]) or {
-			println(err)
-			return error("[Error] Syntax error \'$command\'")
+			return error("Syntax error \'$command\'\n\t$err")
 		}
 		row_to_insert := create_row_with_validation(id, command_args[2], command_args[3]) or {
-			println(err)
-			return error("[Error] Syntax error \'$command\'")
+			return error("Syntax error \'$command\'\n\t$err")
 		}
 		return Statement{
 			statement_type: StatementType.type_insert
@@ -36,7 +33,7 @@ fn prepare_statement(command string) ?Statement {
 			statement_type: StatementType.type_select
 		}
 	}
-	return error("[Error] Unrecognized statement \'$command\'")
+	return error("Unrecognized statement \'$command\'")
 }
 
 fn parse_id(str string) ?u32 {
@@ -55,8 +52,7 @@ fn execute_statement(statement Statement, mut table Table) ? {
 	match statement.statement_type {
 		.type_insert {
 			execute_insert(statement, mut table) or {
-				println(err)
-				return error("[Error] failed to execute statement \'$statement\'")
+				return error("failed to execute statement \'$statement\'\n\t$err")
 			}
 			println('Executed')
 		}
@@ -69,7 +65,7 @@ fn execute_statement(statement Statement, mut table Table) ? {
 
 fn execute_insert(statement Statement, mut table Table) ? {
 	table.insert(statement.row_to_insert) or {
-		return error(err)
+		return error('execute insert failed\n\t$err')
 	}
 }
 

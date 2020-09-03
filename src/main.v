@@ -12,12 +12,12 @@ enum MetaCommandResult {
 fn main() {
 	args := os.args[1..]
 	if args.len == 0 {
-		println('[Error] command should be run with db filename')
+		eprintln('command should be run with db filename')
 	}
 	filepath := args[0]
 	mut readline := readline.Readline{}
 	mut table := core.db_open(filepath) or {
-		println(err)
+		eprintln(err)
 		return
 	}
 	for {
@@ -26,7 +26,7 @@ fn main() {
 		}
 		input := oline.trim_space()
 		meta_command_result := do_meta_command(input) or {
-			println(err)
+			eprintln(err)
 			continue
 		}
 		match meta_command_result {
