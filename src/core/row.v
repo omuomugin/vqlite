@@ -16,6 +16,9 @@ fn create_row_with_validation(id u32, username, email string) ?Row {
 	if email.len > 255 {
 		return error('[Error] email should be less than 255')
 	}
+	if !email.contains('@') {
+		return error('[Error] email should be valid format')
+	}
 	return Row{
 		id: id
 		username: username

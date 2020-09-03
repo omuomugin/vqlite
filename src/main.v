@@ -2,6 +2,7 @@ module main
 
 import readline
 import core
+import os
 
 enum MetaCommandResult {
 	success
@@ -9,8 +10,16 @@ enum MetaCommandResult {
 }
 
 fn main() {
+	args := os.args[1..]
+	if args.len == 0 {
+		println('[Error] command should be run with db filename')
+	}
+	filepath := args[0]
 	mut readline := readline.Readline{}
-	mut table := core.Table{}
+	mut table := core.db_open(filepath) or {
+		println(err)
+		return
+	}
 	for {
 		oline := readline.read_line('db > ') or {
 			break

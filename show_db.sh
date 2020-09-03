@@ -1,0 +1,1 @@
+cat sample.db | xxd

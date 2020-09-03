@@ -1,16 +1,28 @@
 module core
 
-const (
-	table_max_size = 100
-)
-
 pub struct Table {
 pub mut:
-	num_rows u32
-	pages    []Row
+	pager Pager
 }
 
-fn (mut t Table) insert(row Row) {
-	t.pages << row
-	t.num_rows = t.num_rows + 1
+pub fn db_open(filepath string) ?Table {
+	pager := pager_open(filepath) or {
+		return error(err)
+	}
+	return Table{
+		pager: pager
+	}
+}
+
+fn (mut t Table) insert(row Row) ? {
+	t.pager.write_page(row) or {
+		return error(err)
+	}
+}
+
+fn (t Table) select_all() []Row {
+	row := t.pager.get_page() or {
+		return []
+	}
+	return row
 }
