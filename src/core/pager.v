@@ -26,8 +26,8 @@ fn pager_open(filepath string) ?Pager {
 }
 
 fn (pager Pager) get_page() ?[]Row {
-	mut f := os.open_file(pager.filepath, 'rb+', 0o666) or {
-		return error('[Error] Failed to open file : $err')
+	mut f := os.open_file(pager.filepath, 'rb', 0o666) or {
+		return error('[Error] get_page - Failed to open file : $err')
 	}
 	defer {
 		f.close()
@@ -51,7 +51,7 @@ fn (pager Pager) get_page() ?[]Row {
 
 fn (mut p Pager) write_page(row Row) ? {
 	mut f := os.open_file(p.filepath, 'wb+', 0o666) or {
-		return error('[Error] Failed to open file : $err')
+		return error('[Error] write_page - Failed to open file : $err')
 	}
 	defer {
 		f.close()
